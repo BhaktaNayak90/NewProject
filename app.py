@@ -5,11 +5,11 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 app = Flask(__name__)
 
-# Retrieve the Hybrid Connection Gateway connection string from environment variables
+# Get hybrid connection string from environment
 hybrid_connection_string = os.getenv('HYBRID_CONNECTION_STRING')
 
-# SQLAlchemy setup using the Hybrid Connection Gateway connection string
-engine = create_engine(f"mssql+pyodbc://{hybrid_connection_string}")
+# SQLAlchemy setup using hybrid connection string
+engine = create_engine(hybrid_connection_string)
 
 Base = declarative_base()
 metadata = MetaData(bind=engine)
@@ -30,7 +30,6 @@ def get_customer(id):
         else:
             return jsonify({'error': 'Customer not found'}), 404
     except Exception as e:
-        # Log the exception or handle it as per your application's requirements
         return jsonify({'error': str(e)}), 500
     finally:
         session.close()
