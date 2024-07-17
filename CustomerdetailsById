@@ -16,6 +16,7 @@ driver = '{ODBC Driver 17 for SQL Server}'
 conn_str = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
 engine = create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
 
+#Base = declarative_base()
 Base = declarative_base()
 metadata = MetaData(bind=engine)
 # Session = sessionmaker(bind=engine)
