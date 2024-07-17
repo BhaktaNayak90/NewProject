@@ -25,7 +25,7 @@ class Customer(Base):
     __table__ = Table('Customer', metadata, autoload_with=engine)
 
 # API endpoint to fetch customer by ID
-@app.route('/Api/customer/<int:id>', methods=['GET'])
+@app.route('/customer/<int:id>', methods=['GET'])
 def get_customer(id):
     session = Session()
     try:
