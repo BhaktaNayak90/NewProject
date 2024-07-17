@@ -20,7 +20,7 @@ metadata = MetaData()
 
 # Define Customer model
 class Customer(Base):
-    __table__ = Table('Customer', metadata, autoload_with=engine)
+    __table__ = Table('CustomerDetails', metadata, autoload_with=engine)
 
 Session = sessionmaker(bind=engine)
 
