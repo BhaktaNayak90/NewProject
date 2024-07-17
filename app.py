@@ -2,7 +2,6 @@ import os
 from flask import Flask, jsonify
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker, declarative_base
-import pyodbc
 
 app = Flask(__name__)
 
@@ -17,7 +16,8 @@ conn_str = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};
 engine = create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
 
 Base = declarative_base()
-metadata = MetaData(bind=engine)
+metadata = MetaData()
+metadata.bind = engine  # Bind metadata to the engine
 Session = sessionmaker(bind=engine)
 
 # Define Customer model
@@ -33,7 +33,7 @@ def get_customer(id):
         if customer:
             return jsonify({'id': customer.id, 'name': customer.customer_name, 'address': customer.customer_address})
         else:
-            return jsonify({'error': 'Customer not found'}), 444
+            return jsonify({'error': 'Customer not found'}), 404
     except Exception as e:
         # Log the exception or handle it as per your application's requirements
         return jsonify({'error': str(e)}), 500
