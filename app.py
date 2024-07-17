@@ -5,19 +5,14 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 app = Flask(__name__)
 
-# SQLAlchemy setup
-server = os.getenv('DB_SERVER', 'LINKOLJUL23-134')
-database = os.getenv('DB_NAME', 'CustomerDB')
-username = os.getenv('DB_USER', 'APISERVICE1')
-password = os.getenv('DB_PASSWORD', 'Pursuit@123')
-driver = '{ODBC Driver 17 for SQL Server}'
+# Retrieve the Hybrid Connection Gateway connection string from environment variables
+hybrid_connection_string = os.getenv('HYBRID_CONNECTION_STRING')
 
-conn_str = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-engine = create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
+# SQLAlchemy setup using the Hybrid Connection Gateway connection string
+engine = create_engine(f"mssql+pyodbc://{hybrid_connection_string}")
 
 Base = declarative_base()
-metadata = MetaData()
-metadata.bind = engine  # Bind metadata to the engine
+metadata = MetaData(bind=engine)
 Session = sessionmaker(bind=engine)
 
 # Define Customer model
@@ -41,4 +36,4 @@ def get_customer(id):
         session.close()
 
 if __name__ == '__main__':
-    app.run(debug=False)  # Set debug=False for production deployment
+    app.run(debug=False)
